@@ -39,6 +39,7 @@ Route::middleware(['auth'])->group(function(){
     Route::resource('categoria', CategoriaController::class);
     Route::resource('catalogo', CatalogoController::class); // ✅ NUEVO: rutas del catálogo
 
+    Route::get('/pedido/formulario', [PedidoController::class, 'formulario'])->name('pedido.formulario');
     Route::post('/pedido/realizar', [PedidoController::class, 'realizar'])->name('pedido.realizar');
     Route::get('/perfil/pedidos', [PedidoController::class, 'index'])->name('perfil.pedidos');
     Route::patch('/pedidos/{id}/estado', [PedidoController::class, 'cambiarEstado'])->name('pedidos.cambiar.estado');    

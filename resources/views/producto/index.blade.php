@@ -40,6 +40,7 @@
                                         <th>Código</th>
                                         <th>Nombre</th>
                                         <th>Precio</th>
+                                        <th>Cantidad</th>
                                         <th>Categoría</th>
                                         <th>Catálogo</th>
                                         <th>Imagen</th>
@@ -68,6 +69,7 @@
                                                 <td>{{$reg->nombre}}</td>
                                                 <td>${{ number_format($reg->precio,2) }}</td>
 
+                        <td>{{$reg->cantidad}}</td>           
                                                 <td>
                                                     @if($reg->categoria)
                                                         <span class="badge bg-primary">{{ $reg->categoria->nombre }}</span>

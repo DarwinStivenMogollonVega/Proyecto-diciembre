@@ -56,7 +56,9 @@
                 <li class="nav-item dropdown">
                     @auth
                         <a class="nav-link dropdown-toggle" id="navbarDropdownUser" href="#" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">{{ auth()->user()->name }}</a>
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                          <i class="bi bi-person-circle me-2"></i>
+                          {{ auth()->user()->name }}</a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownUser">
                             <li><a class="dropdown-item" href="{{ route('perfil.pedidos') }}">Mis pedidos</a></li>
                             <li><hr class="dropdown-divider" /></li>

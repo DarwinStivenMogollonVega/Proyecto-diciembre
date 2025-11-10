@@ -18,6 +18,7 @@
                     <div class="small mb-1">SKU: {{ $producto->codigo }}</div>
                     <h1 class="display-5 fw-bolder">{{ $producto->nombre }}</h1>
 
+                
                     <!-- Badges categoría y catálogo con iconos y colores -->
                     <p class="mb-2">
                         @if($producto->categoria)
@@ -35,6 +36,20 @@
                     <div class="fs-5 mb-5">
                         <span>${{ number_format($producto->precio, 2) }}</span>
                     </div>
+                    
+                    @if ($producto->cantidad >= 50)
+                <p class="text-success fw-semibold mb-2">
+                    <i class="bi bi-check-circle me-1"></i> Producto disponible
+                </p>
+            @elseif ($producto->cantidad >= 10 && $producto->cantidad < 50)
+                <p class="text-warning fw-semibold mb-2">
+                    <i class="bi bi-exclamation-circle me-1"></i> Pocas unidades
+                </p>
+            @elseif ($producto->cantidad == 0)
+                <p class="text-danger fw-semibold mb-2">
+                    <i class="bi bi-x-circle me-1"></i> Agotado
+                </p>
+            @endif
 
                     <p class="lead">{{ $producto->descripcion }}</p>
 

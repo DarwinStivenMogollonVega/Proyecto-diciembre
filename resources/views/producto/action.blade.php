@@ -50,6 +50,16 @@
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
+                              <!--cantidad -->
+                                <div class="col-md-3 mb-3">
+                                    <label for="cantidad" class="form-label">Cantidad</label>
+                                    <input type="text" class="form-control @error('cantidad') is-invalid @enderror"
+                                        id="cantidad" name="cantidad"
+                                        value="{{ old('cantidad', $registro->cantidad ?? '') }}" required>
+                                    @error('cantidad')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
 
                                 <!-- Categoría -->
                                 <div class="col-md-3 mb-3">

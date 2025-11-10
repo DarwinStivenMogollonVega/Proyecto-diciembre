@@ -32,41 +32,73 @@ class PedidoController extends Controller
         }
         $registros = $query->paginate(10);
         return view('pedido.index', compact('registros', 'texto'));
+    }public function formulario()
+{
+    $carrito = session()->get('carrito', []);
+    if (empty($carrito)) {
+        return redirect()->route('carrito.mostrar')->with('error', 'El carrito está vacío.');
     }
 
-    public function realizar(Request $request){
-        $carrito = session()->get('carrito', []);
+    return view('web.formulario_pedido', compact('carrito'));
+}
+    
+public function realizar(Request $request)
+{
+    $carrito = session()->get('carrito', []);
 
-        if (empty($carrito)) {
-            return redirect()->back()->with('mensaje', 'El carrito está vacío.');
+    // Validar datos del formulario
+    $request->validate([
+        'nombre' => 'required',
+        'email' => 'required|email',
+        'telefono' => 'required',
+        'direccion' => 'required',
+        'metodo_pago' => 'required',
+    ]);
+
+    // Verificar que el carrito no esté vacío
+    if (empty($carrito)) {
+        return redirect()->back()->with('mensaje', 'El carrito está vacío.');
+    }
+
+    DB::beginTransaction();
+
+    try {
+        // 1️⃣ Calcular el total
+        $total = 0;
+        foreach ($carrito as $item) {
+            $total += $item['precio'] * $item['cantidad'];
         }
-        DB::beginTransaction();
-        try {
-            // 1. Calcular el total
-            $total = 0;
-            foreach ($carrito as $item) {
-                $total += $item['precio'] * $item['cantidad'];
-            }
-            // 2. Crear el pedido
-            $pedido = Pedido::create([
-                'user_id' => auth()->id(), 'total' => $total, 'estado' => 'pendiente'
+
+        // 2️⃣ Crear el pedido
+        $pedido = Pedido::create([
+            'user_id' => auth()->id(),
+            'total' => $total,
+            'estado' => 'pendiente',
+        ]);
+
+        // 3️⃣ Crear los detalles del pedido
+        foreach ($carrito as $productoId => $item) {
+            PedidoDetalle::create([
+                'pedido_id' => $pedido->id,
+                'producto_id' => $productoId,
+                'cantidad' => $item['cantidad'],
+                'precio' => $item['precio'],
             ]);
-            // 3. Crear los detalles del pedido
-            foreach ($carrito as $productoId => $item) {
-                PedidoDetalle::create([
-                    'pedido_id' => $pedido->id, 'producto_id' => $productoId,
-                    'cantidad' => $item['cantidad'], 'precio' => $item['precio'],
-                ]);
-            }
-            // 4. Vaciar el carrito de la sesión
-            session()->forget('carrito');
-            DB::commit();
-            return redirect()->route('carrito.mostrar')->with('mensaje', 'Pedido realizado correctamente.');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()->back()->with('error', 'Hubo un error al procesar el pedido.');
         }
+
+        // 4️⃣ Vaciar el carrito
+        session()->forget('carrito');
+
+        DB::commit();
+
+        // 5️⃣ Redirigir con mensaje de éxito
+        return redirect()->route('web.index')->with('success', 'Pedido realizado con éxito.');
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return redirect()->back()->with('error', 'Hubo un error al procesar el pedido.');
     }
+}
+    
 
     public function cambiarEstado(Request $request, $id){
         $pedido = Pedido::findOrFail($id);

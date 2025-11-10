@@ -53,6 +53,7 @@ class ProductoController extends Controller
         $registro->codigo       = $request->input('codigo');
         $registro->nombre       = $request->input('nombre');
         $registro->precio       = $request->input('precio');
+        $registro->cantidad       = $request->input('cantidad');
         $registro->categoria_id = $request->input('categoria_id');
         $registro->catalogo_id  = $request->input('catalogo_id'); // <- agregado
         $registro->descripcion  = $request->input('descripcion');
@@ -100,6 +101,7 @@ class ProductoController extends Controller
         $registro->codigo       = $request->input('codigo');
         $registro->nombre       = $request->input('nombre');
         $registro->precio       = $request->input('precio');
+        $registro->cantidad       = $request->input('cantidad');
         $registro->categoria_id = $request->input('categoria_id');
         $registro->catalogo_id  = $request->input('catalogo_id'); // <- agregado
         $registro->descripcion  = $request->input('descripcion');

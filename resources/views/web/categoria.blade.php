@@ -50,6 +50,27 @@
                         <div class="card-body text-center">
                             <h5 class="fw-bolder">{{ $producto->nombre }}</h5>
 
+                      @php
+        $stock = $producto->cantidad ?? 0;
+    @endphp
+
+    @if ($stock >= 50)
+        <span class="badge bg-success position-absolute top-0 start-0 m-2 p-2 rounded-3 shadow">
+          <i class="bi bi-check-circle me-1"></i>
+            Producto disponible
+        </span>
+    @elseif ($stock >= 10 && $stock < 50)
+        <span class="badge bg-warning text-dark position-absolute top-0 start-0 m-2 p-2 rounded-3 shadow">
+          <i class="bi bi-exclamation-circle me-1"></i>
+            Pocas unidades
+        </span>
+    @elseif ($stock == 0)
+        <span class="badge bg-danger position-absolute top-0 start-0 m-2 p-2 rounded-3 shadow">
+          <i class="bi bi-x-circle me-1"></i>
+            Agotado
+        </span>
+    @endif
+
                             <!-- Badges con íconos -->
                             <p class="mb-1 text-muted small">
                                 @if($producto->categoria)
